@@ -1,0 +1,58 @@
+.raports-page-filters{
+    display: flex;
+    justify-content: space-between;
+    align-items: start;
+}
+
+.raports-page-filters-item{
+    width: 120px;
+    padding-left: 0px; 
+    margin-right: 0px;
+    background: transparent;
+    font-size: 16px;
+    margin-top: 8px;
+}
+
+.filter-category{
+    color: #489253;
+}
+
+.filter-date{
+    color: #763977;
+}
+
+.raports-page-filters-money-type-item{
+    margin-bottom: 5px !important;
+    height: 35px !important;
+    font-size: 14px;
+}
+
+input[type=checkbox]{
+    display: none;
+}
+
+input[type=checkbox]:checked + label {
+    background: #48174A;
+    color: white;
+}
+
+.raports-page-chart{
+    position: relative;
+    height: 355.5px;
+    margin-bottom: 30px;
+}
+
+.raports-page-chart svg{
+    width: auto;
+}
+
+.raports-page-chart-plot{
+    position: absolute;
+    bottom: 0px;
+    left: 0px;
+    transition: 0.3s;
+}
+
+.raports-page-summary > li{
+    margin-bottom: 25px;
+}

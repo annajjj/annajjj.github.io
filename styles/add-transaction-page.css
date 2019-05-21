@@ -1,0 +1,94 @@
+div.add-transaction-page-button{
+    background: #763977;
+    height: 60px;
+    border-radius: 40px;
+    font-size: 20px;
+    color: white;
+}
+
+.add-transaction-manual-page-type-wrapper{
+    display: flex;
+    justify-content: space-between;
+}
+
+.add-transaction-manual-page-type-button{
+    font-size: 18px;
+    flex: 1;
+}
+
+.add-transaction-manual-page-type-button:first-child{
+    margin-right: 20px;
+}
+
+div.add-transaction-manual-page-transaction-money{
+    justify-content: space-between;
+}
+
+.add-transaction-manual-page-transaction-category-panel{
+    margin-bottom: 20px;
+    display: flex;
+    border: 1px solid #EFEFEF;
+    border-radius: 25px;
+    background: #FFFFFF;
+    flex-wrap: wrap;
+    padding: 0px 20px;
+}
+
+.add-transaction-manual-page-transaction-category-panel > li {
+    width: 50%;
+    padding: 20px 0px;
+    font-size: 14px;
+    display: flex;
+    align-items: center;
+}
+
+.add-transaction-manual-page-transaction-category-panel .category{
+    margin-right: 12px;
+}
+
+div.add-transaction-manual-page-transaction-new-category-panel{
+    justify-content: space-between;
+    padding: 20px;
+    position: relative;
+}
+
+.add-transaction-manual-page-transaction-new-category-panel-picker-wrapper{
+    display: flex;
+}
+
+div.add-transaction-manual-page-transaction-new-category-panel .edit{
+    margin-right: 10px;
+}
+
+ul.add-transaction-manual-page-transaction-new-category-panel-icon{
+    position: absolute;
+    left: 35px;
+    border-bottom-left-radius: 0px;
+    height: 170px;
+    top: -165px;
+    right: 0px;
+    box-shadow: 0px 0px 20px 0px rgb(100,100,100,0.2);
+    visibility: hidden;
+    opacity: 0;
+    transition: 0.3s;
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    justify-items: center;
+}
+
+
+input[type=color], input[type=checkbox], input[type=radio]{
+    visibility: hidden;
+}
+
+
+input[type=checkbox]:checked ~ ul.add-transaction-manual-page-transaction-new-category-panel-icon{
+    opacity: 1;
+    visibility: visible;
+}
+
+
+input[type=radio]:checked + label {
+    background: #48174A;
+    color: white;
+}

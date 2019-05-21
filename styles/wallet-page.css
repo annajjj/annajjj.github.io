@@ -1,0 +1,36 @@
+.wallet-page-add-wallet-button-wrapper{
+    display: flex;
+    justify-content: flex-end;
+}
+
+.wallet-page-add-wallet-button{
+    border-radius: 25px;
+    border: 1px solid #48174A;
+    color: #48174A;
+    background: none;
+    font-size: 22px;
+    padding: 5px 30px;
+    font-family: 'Roboto', sans-serif;
+}
+
+ul.wallet-page-wallets-list{
+    margin-top: 40px;
+}
+
+.wallet-page-wallets-item-name{
+    flex-grow: 8;
+    font-size: 14px;
+}
+
+div.wallet-page-wallet-change-item-money{
+    justify-content: space-between;
+}
+
+.wallet-page-wallet-change-command-wrapper{
+    display: flex;
+    justify-content: space-between;
+}
+
+.wallet-page-wallet-change-category-wrapper{
+    display:flex;
+}
