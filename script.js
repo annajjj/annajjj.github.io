@@ -7,12 +7,12 @@ window.onload = function() {
     menuItems.forEach(item => {
         const hideMenuFlag = item.id === "menu-item-settings" ? true : false;
         const hideSettings = item.id === "menu-item-settings" ? true : false;
-        item.addEventListener("click", () => changePage(item, menuNavigation[item.id], true, hideMenuFlag, hideSettings));
+        item.addEventListener("click", () => changePage(item, menuNavigation[item.id], item.id, true, hideMenuFlag, hideSettings));
     });
 
     setTimeout(() => {
         const welcomePage = document.getElementById("welcome-page");
-        changePage(welcomePage, "dashboard-page", true, false);
+        changePage(welcomePage, "dashboard-page", "menu-item-dashboard", true, false);
         document.getElementById("menu-item-settings").style.display = "block";
     },1000)
 }
@@ -25,23 +25,20 @@ function createNode(tag, parent, id, content) {
     document.getElementById(parent).appendChild(node);
 }
 
-function changePage(currentPage, nextPage, changeNav = false, hideMenuFlag = false, hideSettings = false){
-    setMenuItemActive(currentPage, changeNav)
+function changePage(currentPage, nextPage, nextActive, changeNav = false, hideMenuFlag = false, hideSettings = false, ){
+    setMenuItemActive(currentPage, changeNav, nextActive)
     removePreviousNode();
     toggleMenu(hideMenuFlag);
     toggleSettings(hideSettings)
     createNode("div", "container", nextPage, views[nextPage]);
 }
 
-function setMenuItemActive(currentPage, changeNav){
+function setMenuItemActive(currentPage, changeNav, nextActive){
     if(changeNav){
-        const previousActiveParent = document.querySelector('.content-item').id;
-        const previousActive  = document.getElementById(`menu-item-${previousActiveParent.split('-')[0]}`);
-        if(previousActive){
-            previousActive.childNodes[1].classList.toggle("active")
-            if(previousActiveParent!="settings-page" && currentPage.childNodes[1]) currentPage.childNodes[1].classList.toggle("active")
-            else if(previousActiveParent!="transactions-page-manual-add")document.getElementById("menu-item-dashboard").childNodes[1].classList.toggle("active");
-        }
+        const activeElement = document.querySelector('.active');
+        if(activeElement) activeElement.classList.remove("active");
+        const currentActive = document.getElementById(nextActive);
+        currentActive.classList.add("active")
     }
 }
 
@@ -125,7 +122,7 @@ const views = {
     "settings-page": `
         <div class="top background-transparent">
             <h3 class="white">Ustawienia</h3>
-            <div class="arrow-back" onclick="changePage(this, 'dashboard-page', true, false, false)"></div>
+            <div class="arrow-back" onclick="changePage(this, 'dashboard-page', 'menu-item-dashboard',true, false, false)"></div>
         </div>
         <div>
         <div class="content paddingTop-big">
@@ -144,15 +141,15 @@ const views = {
         </div>
         <div class="content">
             <div class="wallet-page-add-wallet-button-wrapper">
-                <button class="wallet-page-add-wallet-button"  onclick="changePage(this, 'wallet-page-wallet-add', false, false, true)">+ Dodaj</button>
+                <button class="wallet-page-add-wallet-button"  onclick="changePage(this, 'wallet-page-wallet-add', 'menu-item-wallet', false, false, true)">+ Dodaj</button>
             </div>
             <ul class="wallet-page-wallets-list">
-                <li class="tile flex-center" onclick="changePage(this, 'wallet-page-wallet-change', false, false, true)">
+                <li class="tile flex-center" onclick="changePage(this, 'wallet-page-wallet-change',  'menu-item-wallet', false, false, true)">
                     <div class="category flex-grow-1 eating"></div>
                     <div class="wallet-page-wallets-item-name">jedzenie</div>
                     <div class="wallet-page-wallets-item-money">500 PLN</div>
                 </li>
-                <li class="tile flex-center" onclick="changePage(this, 'wallet-page-wallet-change', false, false, true)">
+                <li class="tile flex-center" onclick="changePage(this, 'wallet-page-wallet-change',  'menu-item-wallet', false, false, true)">
                     <div class="category flex-grow-1 entertainment"></div>
                     <div class="wallet-page-wallets-item-name">rozrywka</div>
                     <div class="wallet-page-wallets-item-money">250 PLN</div>
@@ -165,15 +162,15 @@ const views = {
             <h3>Dodaj transakcje</h3>
         </div>
         <div class="content marginTop-big">
-            <div class="tile flex-center add-transaction-page-button" onclick="changePage(this, 'transactions-page-manual-add', false, false, true)">wprowadź ręcznie</div>
+            <div class="tile flex-center add-transaction-page-button" onclick="changePage(this, 'transactions-page-manual-add',  'menu-item-transactions', false, false, true)">wprowadź ręcznie</div>
             <div class="tile flex-center add-transaction-page-button">zeskanuj paragon</div>
         </div>
     `,
     "transactions-page-manual-add": `
         <div class="top">
             <h3>Dodaj transakcje</h3>
-            <h5 onclick="changePage(this, 'transactions-page', true, false, false)">Zapisz</h5>
-            <div class="arrow-back" onclick="changePage(this, 'add-transaction-page', true, false, false)"></div>
+            <h5 onclick="changePage(this, 'transactions-page',  'menu-item-transactions',true, false, false)">Zapisz</h5>
+            <div class="arrow-back" onclick="changePage(this, 'add-transaction-page',  'menu-item-transactions',true, false, false)"></div>
         </div>
         <div class="content">
         <div class="add-transaction-manual-page-type-wrapper">
@@ -187,14 +184,29 @@ const views = {
         </div>
         <h4 class="command">dodaj kategorię</h4> 
         <ul class="add-transaction-manual-page-transaction-category-panel">
-            <li><div class="category eating"></div><div>jedzenie</div></li>
-            <li><div class="category transport"></div><div>komunikacja miejska</div></li>
-            <li><div class="category constant"></div><div>opłaty stałe</div></li>
-            <li><div class="category entertainment"></div><div>rozrywka</div></li>
-            <li><div class="category office"></div><div>artykuły biurowe</div></li>
-            <li><div class="category cloth"></div><div>ubrania</div></li>
-            <li><div class="category cosmetics"></div><div>kosmetyki</div></li>
-            <li><div class="category house"></div><div>wyposażenie domu</div></li>
+            <li>
+                <label>jedzenie<input type="radio" name="category"><div class="category eating check"></div></label>
+            </li>
+            <li>
+                <label>komunikacja miejska<input type="radio" name="category"><div class="category transport check"></div></label>
+            <li>
+                <label>opłaty stałe<input type="radio" name="category"><div class="category constant check"></div></label>
+            </li>
+            <li>
+                <label>rozrywka<input type="radio" name="category"><div class="category entertainment check"></div></label>
+            </li>
+            <li>
+                <label>artykuły biurowe<input type="radio" name="category"><div class="category office check"></div></label>
+            </li>
+            <li>
+                <label>ubrania<input type="radio" name="category"><div class="category cloth check"></div></label>
+            </li>
+            <li>
+                <label>kosmetyki<input type="radio" name="category"><div class="category cosmetics check"></div></label>
+            </li>
+            <li>
+                <label>wyposażenie domu<input type="radio" name="category"><div class="category house check"></div></label>
+            </li>
         </ul>
         <h4 class="command">stwórz własną kategorię</h4> 
         <div class="tile flex-center add-transaction-manual-page-transaction-new-category-panel">
@@ -293,7 +305,7 @@ const views = {
                                 <div class="category flex-grow-1 entertainment"></div>
                                 <div class="transactions-page-transaction-item-name">bilety na koncert</div>
                                 <div class="transactions-page-transaction-item-money">-300 zł</div>
-                                <div class="category more" onclick="changePage(this, 'transactions-page-transaction-edit', false, false, true)"></div>
+                                <div class="category more" onclick="changePage(this, 'transactions-page-transaction-edit',  'menu-item-transactions',false, false, true)"></div>
                                 <div class="transaction-page-transaction-remove">
                                     <div class="category remove"></div>
                                 </div>
@@ -302,7 +314,7 @@ const views = {
                                 <div class="category flex-grow-1 eating"></div>
                                 <div class="transactions-page-transaction-item-name">Kaufland</div>
                                 <div class="transactions-page-transaction-item-money">-58.75 zł</div>
-                                <div class="category more" onclick="changePage(this, 'transactions-page-transaction-edit', false, false, true)"></div>
+                                <div class="category more" onclick="changePage(this, 'transactions-page-transaction-edit', 'menu-item-transactions',false, false, true)"></div>
                                 <div class="transaction-page-transaction-remove">
                                     <div class="category remove"></div>
                                 </div>
@@ -311,7 +323,7 @@ const views = {
                                 <div class="category flex-grow-1 money"></div>
                                 <div class="transactions-page-transaction-item-name">Wypłata</div>
                                 <div class="transactions-page-transaction-item-money">3578 zł</div>
-                                <div class="category more" onclick="changePage(this, 'transactions-page-transaction-edit', false, false, true)"></div>
+                                <div class="category more" onclick="changePage(this, 'transactions-page-transaction-edit',  'menu-item-transactions', false, false, true)"></div>
                                 <div class="transaction-page-transaction-remove">
                                     <div class="category remove"></div>
                                 </div>
@@ -325,7 +337,7 @@ const views = {
                                 <div class="category flex-grow-1 house"></div>
                                 <div class="transactions-page-transaction-item-name">Zasłony</div>
                                 <div class="transactions-page-transaction-item-money">-450 zł</div>
-                                <div class="category more" onclick="changePage(this, 'transactions-page-transaction-edit', false, false, true)"></div>
+                                <div class="category more" onclick="changePage(this, 'transactions-page-transaction-edit',  'menu-item-transactions', false, false, true)"></div>
                                 <div class="transaction-page-transaction-remove">
                                     <div class="category remove"></div>
                                 </div>
@@ -334,7 +346,7 @@ const views = {
                                 <div class="category flex-grow-1 eating"></div>
                                 <div class="transactions-page-transaction-item-name">Żabka</div>
                                 <div class="transactions-page-transaction-item-money">-21.34 zł</div>
-                                <div class="category more" onclick="changePage(this, 'transactions-page-transaction-edit', false, false, true)"></div>
+                                <div class="category more" onclick="changePage(this, 'transactions-page-transaction-edit', 'menu-item-transactions', false, false, true)"></div>
                                 <div class="transaction-page-transaction-remove">
                                     <div class="category remove"></div>
                                 </div>
@@ -343,7 +355,7 @@ const views = {
                                 <div class="category flex-grow-1 cloth"></div>
                                 <div class="transactions-page-transaction-item-name">HM</div>
                                 <div class="transactions-page-transaction-item-money">-99.99 zł</div>
-                                <div class="category more" onclick="changePage(this, 'transaction-page-transaction-edit', false, false, true)"></div>
+                                <div class="category more" onclick="changePage(this, 'transactions-page-transaction-edit', 'menu-item-transactions', false, false, true)"></div>
                                 <div class="transaction-page-transaction-remove">
                                 </div>
                             </li>
@@ -355,8 +367,8 @@ const views = {
     "transactions-page-transaction-edit": `
             <div class="top">
                 <h3>Edytuj transakcje</h3>
-                <h5 onclick="changePage(this, 'transactions-page', false, false, false)">Zapisz</h5>
-                <div class="arrow-back" onclick="changePage(this, 'transactions-page', false, false, false)"></div>
+                <h5 onclick="changePage(this, 'transactions-page', 'menu-item-transactions', false, false, false)">Zapisz</h5>
+                <div class="arrow-back" onclick="changePage(this, 'transactions-page', 'menu-item-transactions', false, false, false)"></div>
             </div>
             <div class="content">
                 <div class="add-transaction-manual-page-type-wrapper">
@@ -377,36 +389,27 @@ const views = {
                 <h4 class="command">zmień kategorię</h4>
                 <ul class="add-transaction-manual-page-transaction-category-panel">
                     <li>
-                        <div class="category eating"></div>
-                        <div>jedzenie</div>
+                        <label>jedzenie<input type="radio" name="category"><div class="category eating check"></div></label>
                     </li>
                     <li>
-                        <div class="category transport"></div>
-                        <div>komunikacja miejska</div>
+                        <label>komunikacja miejska<input type="radio" name="category"><div class="category transport check"></div></label>
+                    <li>
+                        <label>opłaty stałe<input type="radio" name="category"><div class="category constant check"></div></label>
                     </li>
                     <li>
-                        <div class="category constant"></div>
-                        <div>opłaty stałe</div>
+                        <label>rozrywka<input type="radio" name="category"><div class="category entertainment check"></div></label>
                     </li>
                     <li>
-                        <div class="category entertainment"></div>
-                        <div>rozrywka</div>
+                        <label>artykuły biurowe<input type="radio" name="category"><div class="category office check"></div></label>
                     </li>
                     <li>
-                        <div class="category office"></div>
-                        <div>artykuły biurowe</div>
+                        <label>ubrania<input type="radio" name="category"><div class="category cloth check"></div></label>
                     </li>
                     <li>
-                        <div class="category cloth"></div>
-                        <div>ubrania</div>
+                        <label>kosmetyki<input type="radio" name="category"><div class="category cosmetics check"></div></label>
                     </li>
                     <li>
-                        <div class="category cosmetics"></div>
-                        <div>kosmetyki</div>
-                    </li>
-                    <li>
-                        <div class="category house"></div>
-                        <div>wyposażenie domu</div>
+                        <label>wyposażenie domu<input type="radio" name="category"><div class="category house check"></div></label>
                     </li>
                 </ul>
                 <h4 class="command">stwórz własną kategorię</h4>
@@ -441,8 +444,8 @@ const views = {
     "wallet-page-wallet-change": `
         <div class="top">
             <h3>Edytuj budżet</h3>
-            <h5 onclick="changePage(this, 'wallet-page', false, false, false)">Zapisz</h5>
-            <div class="arrow-back" onclick="changePage(this, 'wallet-page', false, false, false)"></div>
+            <h5 onclick="changePage(this, 'wallet-page', 'menu-item-wallet', false, false, false)">Zapisz</h5>
+            <div class="arrow-back" onclick="changePage(this, 'wallet-page', 'menu-item-wallet', false, false, false)"></div>
         </div>
         <div class="content marginTop-big">
             <div class="wallet-page-wallet-change-command-wrapper command"> 
@@ -460,8 +463,8 @@ const views = {
         "wallet-page-wallet-add": `
             <div class="top">
                     <h3>Dodaj budżet</h3>
-                    <h5 onclick="changePage(this, 'wallet-page', false, false, false)">Zapisz</h5>
-                    <div class="arrow-back" onclick="changePage(this, 'wallet-page', false, false, false)"></div>
+                    <h5 onclick="changePage(this, 'wallet-page', 'menu-item-wallet',false, false, false)">Zapisz</h5>
+                    <div class="arrow-back" onclick="changePage(this, 'wallet-page', 'menu-item-wallet',false, false, false)"></div>
                 </div>
                 <div class="content marginTop-big">
                 <h4>ustaw maksimum</h4>  
@@ -471,38 +474,29 @@ const views = {
                 </div>
                     <h4>wybierz kategorię</h4>  
                     <ul class="add-transaction-manual-page-transaction-category-panel">
-                    <li>
-                        <div class="category eating"></div>
-                        <div>jedzenie</div>
-                    </li>
-                    <li>
-                        <div class="category transport"></div>
-                        <div>komunikacja miejska</div>
-                    </li>
-                    <li>
-                        <div class="category constant"></div>
-                        <div>opłaty stałe</div>
-                    </li>
-                    <li>
-                        <div class="category entertainment"></div>
-                        <div>rozrywka</div>
-                    </li>
-                    <li>
-                        <div class="category office"></div>
-                        <div>artykuły biurowe</div>
-                    </li>
-                    <li>
-                        <div class="category cloth"></div>
-                        <div>ubrania</div>
-                    </li>
-                    <li>
-                        <div class="category cosmetics"></div>
-                        <div>kosmetyki</div>
-                    </li>
-                    <li>
-                        <div class="category house"></div>
-                        <div>wyposażenie domu</div>
-                    </li>
+                        <li>
+                            <label>jedzenie<input type="radio" name="category"><div class="category eating check"></div></label>
+                        </li>
+                        <li>
+                            <label>komunikacja miejska<input type="radio" name="category"><div class="category transport check"></div></label>
+                        <li>
+                            <label>opłaty stałe<input type="radio" name="category"><div class="category constant check"></div></label>
+                        </li>
+                        <li>
+                            <label>rozrywka<input type="radio" name="category"><div class="category entertainment check"></div></label>
+                        </li>
+                        <li>
+                            <label>artykuły biurowe<input type="radio" name="category"><div class="category office check"></div></label>
+                        </li>
+                        <li>
+                            <label>ubrania<input type="radio" name="category"><div class="category cloth check"></div></label>
+                        </li>
+                        <li>
+                            <label>kosmetyki<input type="radio" name="category"><div class="category cosmetics check"></div></label>
+                        </li>
+                        <li>
+                            <label>wyposażenie domu<input type="radio" name="category"><div class="category house check"></div></label>
+                        </li>
                 </ul>
 
                 </div>`,    

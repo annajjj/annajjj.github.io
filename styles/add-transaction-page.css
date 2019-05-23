@@ -24,7 +24,7 @@ div.add-transaction-manual-page-transaction-money{
     justify-content: space-between;
 }
 
-.add-transaction-manual-page-transaction-category-panel{
+ul.add-transaction-manual-page-transaction-category-panel{
     margin-bottom: 20px;
     display: flex;
     border: 1px solid #EFEFEF;
@@ -34,7 +34,7 @@ div.add-transaction-manual-page-transaction-money{
     padding: 0px 20px;
 }
 
-.add-transaction-manual-page-transaction-category-panel > li {
+ul.add-transaction-manual-page-transaction-category-panel > li {
     width: 50%;
     padding: 20px 0px;
     font-size: 14px;
@@ -42,7 +42,28 @@ div.add-transaction-manual-page-transaction-money{
     align-items: center;
 }
 
-.add-transaction-manual-page-transaction-category-panel .category{
+ul.add-transaction-manual-page-transaction-category-panel  label {
+    display: flex;
+    flex-direction: row-reverse;
+}
+input[type=radio]:checked + .check {
+    position: relative;
+}
+
+input[type=radio]:checked + .check:before {
+    content: '';
+    border: 1px solid #763977;
+    border-radius: 50%;
+    width: 25px;
+    height: 25px;
+    display: block;
+    padding: 5px;
+    top: -5px;
+    left: -5px;
+    position: absolute;
+}
+
+ul.add-transaction-manual-page-transaction-category-panel .category{
     margin-right: 12px;
 }
 

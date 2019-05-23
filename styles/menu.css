@@ -54,7 +54,7 @@ li.menu-item{
     font-weight: 300;
 }
 
-.active:not(.add-button) * {
+.active > :not(.add-button) * {
     fill: #48174a;
     stroke: #48174a;
 }
